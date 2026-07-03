@@ -28,11 +28,18 @@ def search_and_scrape(query):
     if not api_key or not cx:
         return "系統設定錯誤：缺少 Google 搜尋 API 金鑰或搜尋引擎 ID。"
 
-    # 呼叫官方 API（設定 num=5 抓取前五筆結果）
-    search_url = f"https://www.googleapis.com/customsearch/v1?q={query}&key={api_key}&cx={cx}&num=5"
+    # 呼叫官方 API（使用 params 字典，自動處理中文、空格編碼與變數去空白）
+    search_url = "https://www.googleapis.com/customsearch/v1"
+    params = {
+        "q": query,
+        "key": api_key.strip() if api_key else "",
+        "cx": cx.strip() if cx else "",
+        "num": 5
+    }
     
     try:
-        res = requests.get(search_url, timeout=10)
+        # requests 會自動將 params 編碼成安全的標準網址格式
+        res = requests.get(search_url, params=params, timeout=10)
         data = res.json()
         
         if 'items' not in data:

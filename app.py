@@ -36,7 +36,8 @@ def search_and_scrape(query):
         data = res.json()
         
         if 'items' not in data:
-            return "官方 API 搜尋不到相關網頁結果，或您的每日免費額度已用盡。"
+            # 強制印出 Google 官方的原始回傳數據，抓出真正的錯誤原因
+            return f"系統除錯警報！Google API 未正常回傳資料。原始數據為：{str(data)}"
             
         combined_text = ""
         # 微調：模擬真實瀏覽器以降低基礎反爬蟲阻擋機率
